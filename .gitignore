@@ -1,18 +1,11 @@
 #Platform folders
-.gradle
-.studio
 build
 out
 war
 
 #Idea folders & files
-.idea
 *.iml
 *.iws
 *.ipr
 test-run/
-/deploy/
-dataSources/
-.ideaDataSources/
-*.ids
-.DS_Store
+nbproject/
