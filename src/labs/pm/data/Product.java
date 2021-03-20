@@ -12,7 +12,7 @@ import static java.math.RoundingMode.HALF_UP;
  *
  * @author Assanali
  */
-public class Product {
+public abstract class Product {
     public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
     
     private int id;
@@ -67,7 +67,15 @@ public class Product {
         return rating;
     }
     
-    public Product applyRating(Rating newRating) {
-        return new Product(this.id, this.name, this.price, newRating);
+    public abstract Product applyRating(Rating newRating);
+//    {
+//        return new Product(this.id, this.name, this.price, newRating);
+//    }
+
+    @Override
+    public String toString() {
+        return "Product {" + " id = " + id + ", name = " + name + ", price = " + price + ", rating = " + rating + " } ";
     }
+    
+    
 }
