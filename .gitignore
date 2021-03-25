@@ -8,3 +8,4 @@ out
 *.ipr
 test-run/
 nbproject/
+/dist/

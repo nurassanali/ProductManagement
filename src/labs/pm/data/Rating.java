@@ -7,6 +7,8 @@ package labs.pm.data;
 
 public enum Rating {
     NOT_RATED("-_-"),
+    ONE_STAR("*"),
+    TWO_STAR("**"),
     FOUR_STAR("****"),
     FIVE_STAR("*****"), 
     THREE_STAR ("****");
