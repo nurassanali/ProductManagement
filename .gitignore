@@ -1,7 +1,6 @@
 #Platform folders
 build
 out
-war
 
 #Idea folders & files
 *.iml
