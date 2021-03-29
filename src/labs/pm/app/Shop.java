@@ -21,7 +21,13 @@ public class Shop {
         Product product1 = pm.createProduct(101, "Tea", BigDecimal.valueOf(1.90), Rating.NOT_RATED);
         pm.printProductReport();
         product1 = pm.reviewProduct(product1, Rating.FOUR_STAR, "nice hot cup of tea");
+        product1 = pm.reviewProduct(product1, Rating.TWO_STAR, "rather weak tea");
+        product1 = pm.reviewProduct(product1, Rating.FOUR_STAR, "fine tea");
+        product1 = pm.reviewProduct(product1, Rating.FOUR_STAR, "good tea");
+        product1 = pm.reviewProduct(product1, Rating.FIVE_STAR, "perfect tea");
+        product1 = pm.reviewProduct(product1, Rating.THREE_STAR, "just add some lemon!");
         pm.printProductReport();
+        System.out.println();
         Product p2 = new Drink(102, "Coffee", BigDecimal.valueOf(1.99), Rating.FOUR_STAR);
         Product p3 = new Food(103, "cAKE", BigDecimal.valueOf(3.99), Rating.FIVE_STAR, LocalDate.now().plusDays(2));
         Product p4 = new Food(104, "Cookie", BigDecimal.valueOf(2.15), Rating.FOUR_STAR, LocalDate.now());
