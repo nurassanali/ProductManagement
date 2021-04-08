@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,18 +32,18 @@ public class ProductManager {
         this(locale.toLanguageTag());
     }
 
-    public ProductManager (String languageTag) {
+    public ProductManager(String languageTag) {
         changeLocale(languageTag);
     }
-    
+
     public void changeLocale(String languageTag) {
         formatter = formatters.getOrDefault(languageTag, formatters.get("en-GB"));
     }
-    
+
     public static Set<String> getSupportedLocales() {
         return formatters.keySet();
     }
-    
+
     public Product createProduct(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
         Product product = new Food(id, name, price, rating, bestBefore);
         products.putIfAbsent(product, new ArrayList<>());
@@ -84,6 +85,17 @@ public class ProductManager {
         }
 
         return result;
+    }
+
+    public void printProducts(Comparator<Product> sorter) {
+        List<Product> productList = new ArrayList<>(products.keySet());
+        productList.sort(sorter);
+        StringBuilder txt = new StringBuilder();
+        for (Product product : productList) {
+            txt.append(formatter.formatProduct(product));
+            txt.append("\n");
+        }
+        System.out.println(txt);
     }
 
     public void printProductReport(int id) {
