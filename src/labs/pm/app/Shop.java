@@ -20,13 +20,13 @@ public class Shop {
 
         // TODO code application logic here
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.90), Rating.NOT_RATED);
+        pm.printProductReport(42);
         pm.reviewProduct(42, Rating.FOUR_STAR, "nice hot cup of tea");
         pm.reviewProduct(101, Rating.TWO_STAR, "rather weak tea");
         pm.reviewProduct(101, Rating.FOUR_STAR, "fine tea");
         pm.reviewProduct(101, Rating.FOUR_STAR, "good tea");
         pm.reviewProduct(101, Rating.FIVE_STAR, "perfect tea");
         pm.reviewProduct(101, Rating.THREE_STAR, "just add some lemon!");
-//        pm.printProductReport(101);
         System.out.println();
 
         pm.changeLocale("ru-RU");
