@@ -81,7 +81,7 @@ public class ProductManager {
     }
 
     public Product findProduct(int id) {
-        return products.keySet().stream().filter(p -> p.getId() == id).findFirst().orElseGet(() -> null);
+        return products.keySet().stream().filter(p -> p.getId() == id).findFirst().get();
     }
 
     public void printProducts(Predicate<Product> filter, Comparator<Product> sorter) {

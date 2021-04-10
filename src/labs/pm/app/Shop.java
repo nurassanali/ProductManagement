@@ -20,7 +20,7 @@ public class Shop {
 
         // TODO code application logic here
         pm.createProduct(101, "Tea", BigDecimal.valueOf(1.90), Rating.NOT_RATED);
-        pm.reviewProduct(101, Rating.FOUR_STAR, "nice hot cup of tea");
+        pm.reviewProduct(42, Rating.FOUR_STAR, "nice hot cup of tea");
         pm.reviewProduct(101, Rating.TWO_STAR, "rather weak tea");
         pm.reviewProduct(101, Rating.FOUR_STAR, "fine tea");
         pm.reviewProduct(101, Rating.FOUR_STAR, "good tea");
