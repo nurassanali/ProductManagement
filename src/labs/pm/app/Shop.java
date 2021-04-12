@@ -19,17 +19,17 @@ public class Shop {
         ProductManager pm = new ProductManager("en-GB");
 
         pm.printProductReport(101);
-        
+        pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
+        pm.reviewProduct(102, Rating.THREE_STAR, "coffee was ok");
+        pm.reviewProduct(102, Rating.ONE_STAR, "where is milk&!");
+        pm.reviewProduct(102, Rating.FIVE_STAR, "It's perfect with ten spoons of sugar");
+        pm.dumpData();
+        pm.restoreData();
         System.out.println();
-
+        pm.printProductReport(102);
 //        pm.changeLocale("ru-RU");
 //
-//        pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
-//        pm.reviewProduct(102, Rating.THREE_STAR, "coffee was ok");
-//        pm.reviewProduct(102, Rating.ONE_STAR, "where is milk&!");
-//        pm.reviewProduct(102, Rating.FIVE_STAR, "It's perfect with ten spoons of sugar");
-//        pm.printProductReport(p2);
-
+        
 //        pm.parseProduct("F, 103, cAKE, 3.99, 3, 2020-09-11");
 //        pm.printProductReport(103);
 //        pm.reviewProduct(103, Rating.FIVE_STAR, "veri nice cake");

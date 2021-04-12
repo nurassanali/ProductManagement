@@ -5,11 +5,12 @@
  */
 package labs.pm.data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import static java.math.RoundingMode.HALF_UP;
 import java.time.LocalDate;
 
-public abstract class Product implements Rateable<Product> {
+public abstract class Product implements Rateable<Product>, Serializable {
 
     public static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.1);
 
