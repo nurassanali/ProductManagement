@@ -1,6 +1,12 @@
 package labs.pm.data;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -26,8 +32,12 @@ public class ProductManager {
     private Map<Product, List<Review>> products = new HashMap<>();
     private ResourceBundle config = ResourceBundle.getBundle("labs.pm.data.config");
     private MessageFormat reviewFormat = new MessageFormat(config.getString("review.data.format"));
-    private MessageFormat productFormat = new MessageFormat(config.getString("product.data.format"));
+    private MessageFormat productFormat = new MessageFormat(config.getString("product.data.format"));    
+    private Path reportsFolder = Path.of(config.getString("reports.folder"));
+    private Path dataFolder = Path.of(config.getString("data.folder"));
+    private Path tempFolder = Path.of(config.getString("temp.folder"));
     private ResourceFormatter formatter;
+    
     private static Map<String, ResourceFormatter> formatters = Map.of(
             "en-GB", new ResourceFormatter(Locale.UK),
             "en-US", new ResourceFormatter(Locale.US),
@@ -113,28 +123,34 @@ public class ProductManager {
 
     public void printProductReport(int id) {
         try {
+            System.out.println("Line separaor: " + System.lineSeparator());
             printProductReport(findProduct(id));
         } catch (ProductManagementException ex) {
             logger.log(Level.INFO, ex.getMessage());
+        } catch (IOException ioe) {
+            logger.log(Level.SEVERE,"Something went wrong during printing product report " + ioe.getMessage());
         }
     }
 
-    public void printProductReport(Product product) {
-        StringBuilder txt = new StringBuilder();
-        txt.append(formatter.formatProduct(product));
-        txt.append('\n');
+    public void printProductReport(Product product) throws IOException {
+        Path productFile = reportsFolder.resolve(
+            MessageFormat.format(config.getString("report.file"), product.getId()));
+        try (PrintWriter out = new PrintWriter(new OutputStreamWriter(
+                Files.newOutputStream(productFile, StandardOpenOption.CREATE), "UTF-8"))) {
+        out.append(formatter.formatProduct(product));
+        out.append(System.lineSeparator());      
         List<Review> reviews = products.get(product);
         Collections.sort(reviews);
 
         if (reviews.isEmpty()) {
-            txt.append(formatter.getText("no.review"));
-            txt.append('\n');
+            out.append(formatter.getText("no.review"));
+            out.append(System.lineSeparator());
         } else {
-            txt.append(reviews.stream()
+            out.append(reviews.stream()
                 .map(r -> formatter.formatReview(r) + '\n')
                 .collect(Collectors.joining()));
         }
-        System.out.println(txt);
+        }
     }
     
     public void parseReview(String text) {
