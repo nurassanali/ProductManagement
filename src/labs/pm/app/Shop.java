@@ -16,9 +16,8 @@ public class Shop {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ProductManager pm = new ProductManager("en-GB");
-
-        pm.printProductReport(101);
+        ProductManager pm = ProductManager.getInstance();
+        pm.printProductReport(101, "en-GB");
         pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
         pm.reviewProduct(102, Rating.THREE_STAR, "coffee was ok");
         pm.reviewProduct(102, Rating.ONE_STAR, "where is milk&!");
@@ -26,7 +25,7 @@ public class Shop {
         pm.dumpData();
         pm.restoreData();
         System.out.println();
-        pm.printProductReport(102);
+        pm.printProductReport(102, "en-GB");
 //        pm.changeLocale("ru-RU");
 //
         
