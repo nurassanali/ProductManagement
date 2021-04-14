@@ -27,20 +27,10 @@ public class Shop {
         System.out.println();
         pm.printProductReport(102, "en-GB");
 //        pm.changeLocale("ru-RU");
-//
-        
-//        pm.parseProduct("F, 103, cAKE, 3.99, 3, 2020-09-11");
-//        pm.printProductReport(103);
-//        pm.reviewProduct(103, Rating.FIVE_STAR, "veri nice cake");
-//        pm.reviewProduct(103, Rating.FOUR_STAR, "it good, but i've expected more chocolate");
-//        pm.reviewProduct(103, Rating.FIVE_STAR, "this cake is perfect");
+//        
+        pm.printProductReport(103, "en-GB");
 //
 //        pm.createProduct(104, "Cookie", BigDecimal.valueOf(2.15), Rating.FOUR_STAR, LocalDate.now());
-//
-//        pm.createProduct(106, "Chocolate", BigDecimal.valueOf(2.50), Rating.NOT_RATED, LocalDate.now());
-//        pm.reviewProduct(106, Rating.TWO_STAR, "Too sweet");
-//        pm.reviewProduct(106, Rating.THREE_STAR, "better then cookie");
-//        pm.reviewProduct(106, Rating.TWO_STAR, "Too bitter");
 //        pm.reviewProduct(106, Rating.ONE_STAR, "I don't get it!");
 //        pm.printProductReport(106);
 
