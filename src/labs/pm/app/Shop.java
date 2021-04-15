@@ -3,7 +3,19 @@ package labs.pm.app;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import labs.pm.data.Drink;
 import labs.pm.data.Food;
 import labs.pm.data.Product;
@@ -17,29 +29,44 @@ public class Shop {
      */
     public static void main(String[] args) {
         ProductManager pm = ProductManager.getInstance();
-        pm.printProductReport(101, "en-GB");
-        pm.createProduct(102, "Coffee", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
-        pm.reviewProduct(102, Rating.THREE_STAR, "coffee was ok");
-        pm.reviewProduct(102, Rating.ONE_STAR, "where is milk&!");
-        pm.reviewProduct(102, Rating.FIVE_STAR, "It's perfect with ten spoons of sugar");
-        pm.dumpData();
-        pm.restoreData();
-        System.out.println();
-        pm.printProductReport(102, "en-GB");
-//        pm.changeLocale("ru-RU");
-//        
-        pm.printProductReport(103, "en-GB");
-//
-//        pm.createProduct(104, "Cookie", BigDecimal.valueOf(2.15), Rating.FOUR_STAR, LocalDate.now());
-//        pm.reviewProduct(106, Rating.ONE_STAR, "I don't get it!");
-//        pm.printProductReport(106);
-
-        Comparator<Product> ratingSorter = (p1, p2) -> p2.getRating().ordinal() - p1.getRating().ordinal();
-//        pm.printProducts(p -> p.getPrice().floatValue() < 2, ratingSorter);
-        Comparator<Product> priceSorter = (p1, p2) -> p2.getPrice().compareTo(p1.getPrice());
-
-//        pm.getDiscounts().forEach((rating, discount) -> System.out.println(rating + "\t" + discount));
-//        pm.printProducts(ratingSorter.thenComparing(priceSorter));        
-//        pm.printProducts(ratingSorter.thenComparing(priceSorter).reversed());       
+        
+        AtomicInteger clientCount = new AtomicInteger(0);
+        Callable<String> client = () -> {
+            String clientId = "Client " + clientCount.incrementAndGet();
+            String threadName = Thread.currentThread().getName();
+            int productId = ThreadLocalRandom.current().nextInt(2) + 101;
+            String languageTag = ProductManager.getSupportedLocales().stream()
+                    .skip(ThreadLocalRandom.current().nextInt(4))
+                    .findFirst().get();
+            StringBuilder log = new StringBuilder();
+            log.append(clientId + " " + threadName + "\n - \tstart of log\t - \n");
+            log.append(pm.getDiscounts(languageTag)
+                .entrySet().stream()
+                .map(entry -> entry.getKey() + "\t" + entry.getValue())
+                .collect(Collectors.joining("\n")));
+            Product product = pm.reviewProduct(productId, Rating.FOUR_STAR, "Yet another comment");
+            log.append(product != null ? "\n Product " + productId + " reviewd \n" : "\n Product not reviewed \n");
+            pm.printProductReport(productId, languageTag, clientId);
+            log.append("\n - \tend of log\t - \n");
+            
+            return log.toString();
+        };
+        
+        List<Callable<String>> clients = Stream.generate(() -> client).limit(5).collect(Collectors.toList());
+                
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        try {
+            List<Future<String>> results = executorService.invokeAll(clients);
+            executorService.shutdown();
+            results.stream().forEach(result -> {
+                try {
+                System.out.println(result.get());
+                } catch (InterruptedException | ExecutionException ie) {
+                    Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, "Error retrieving client log", ie);
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, "Error invoking clients", ex);
+        }
     }
 }

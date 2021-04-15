@@ -315,15 +315,15 @@ public class ProductManager {
     public Map<String, String> getDiscounts(String languageTag) {
         try {
             readLock.lock();
-        ResourceFormatter formatter = formatters.getOrDefault(languageTag, formatters.get("en_GB"));
-        return products.keySet()
-                .stream()
-                .collect(Collectors.groupingBy(
-                        product -> product.getRating().getStars(),
-                        Collectors.collectingAndThen(
-                                Collectors.summingDouble(
-                                        product -> product.getDiscount().doubleValue()),
-                                discount -> formatter.moneyFormat.format(discount))));
+            ResourceFormatter formatter = formatters.getOrDefault(languageTag, formatters.get("en_GB"));
+            return products.keySet()
+                    .stream()
+                    .collect(Collectors.groupingBy(
+                            product -> product.getRating().getStars(),
+                            Collectors.collectingAndThen(
+                                    Collectors.summingDouble(
+                                            product -> product.getDiscount().doubleValue()),
+                                    discount -> formatter.moneyFormat.format(discount))));
         } finally {
             readLock.unlock();
         }
